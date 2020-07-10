@@ -1,5 +1,6 @@
 package com.guyroyse.ephemeral.graph;
 
+import com.guyroyse.ephemeral.graph.annotations.GraphID;
 import com.guyroyse.ephemeral.graph.annotations.GraphInt;
 import com.guyroyse.ephemeral.graph.annotations.GraphString;
 import com.guyroyse.ephemeral.graph.annotations.Graphable;
@@ -30,6 +31,7 @@ public class EphemeralGraphTests {
 
         @Graphable("user")
         class Thing {
+            @GraphID
             @GraphString("name")
             public String getName() {
                 return "Bob";
@@ -43,6 +45,9 @@ public class EphemeralGraphTests {
 
         subject.load(new Thing());
 
-        verify(mockGraph).query("some_graph", "CREATE (n:user) SET n.name = 'Bob', n.age = 106");
+        String key = "some_graph";
+        String query = "CREATE (n:user) SET n.__id = 'Bob', n.name = 'Bob', n.age = 106";
+
+        verify(mockGraph).query(key, query);
     }
 }
