@@ -1,5 +1,8 @@
 package com.guyroyse.ephemeral.graph;
 
+import com.guyroyse.ephemeral.graph.lettuce.GraphCommands;
+import com.guyroyse.ephemeral.graph.lettuce.LettuceGraph;
+
 import java.util.List;
 
 public class EphemeralGraph {

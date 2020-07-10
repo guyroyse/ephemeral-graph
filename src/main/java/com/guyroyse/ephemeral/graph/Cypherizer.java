@@ -1,5 +1,9 @@
 package com.guyroyse.ephemeral.graph;
 
+import com.guyroyse.ephemeral.graph.annotations.GraphInt;
+import com.guyroyse.ephemeral.graph.annotations.GraphString;
+import com.guyroyse.ephemeral.graph.annotations.Graphable;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package com.guyroyse.ephemeral.graph;
+package com.guyroyse.ephemeral.graph.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

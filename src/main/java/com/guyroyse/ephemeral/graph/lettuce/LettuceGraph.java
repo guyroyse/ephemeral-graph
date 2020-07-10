@@ -1,4 +1,4 @@
-package com.guyroyse.ephemeral.graph;
+package com.guyroyse.ephemeral.graph.lettuce;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.dynamic.RedisCommandFactory;
