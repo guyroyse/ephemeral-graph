@@ -16,10 +16,9 @@ public class EphemeralGraph {
         this.lettuceGraph = new LettuceGraph("redis://localhost");
     }
 
-    public void load(Object object) {
+    public List load(Object object) {
         GraphCommands graph = lettuceGraph.getCommands();
         String query = cypherizer.cypherize(object);
-        List result = graph.query(key, query);
-        System.out.println(result);
+        return graph.query(key, query);
     }
 }
