@@ -40,7 +40,7 @@ public class EphemeralGraphTests {
             subject.load(new Thing("1", "Bob", 106));
 
             String key = "some_graph";
-            String query = "CREATE (n:user) SET n.__id = 'Bob', n.name = 'Bob', n.age = 106";
+            String query = "CREATE (n:thing) SET n.__id = '1', n.age = 106, n.name = 'Bob'";
 
             verify(mockGraph).query(key, query);
         }
@@ -108,7 +108,7 @@ public class EphemeralGraphTests {
     }
 
     @Graphable("thing")
-    class Thing {
+    public class Thing {
         private String id;
         private String name;
         private int age;
@@ -135,8 +135,8 @@ public class EphemeralGraphTests {
         }
     }
 
-    @Graphable("thing")
-    class Cat {
+    @Graphable("cat")
+    public class Cat {
         private String id;
         private String name;
         private String knows;

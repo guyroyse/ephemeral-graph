@@ -23,107 +23,97 @@ public class CypherizerTests {
 
     @Test
     public void it_cypherizes_an_object_with_just_an_id_and_no_properties() {
-
-        @Graphable("thing")
-        class Thing {
-            @GraphID
-            public String getID() {
-                return "foo";
-            }
-        }
-
         String expected = "CREATE (n:thing) SET n.__id = 'foo'";
-        String actual = subject.cypherize(new Thing());
-
+        String actual = subject.cypherize(new ThingWithID());
         assertThat(actual, is(expected));
+    }
+
+    @Graphable("thing")
+    public class ThingWithID {
+        @GraphID
+        public String getID() {
+            return "foo";
+        }
     }
 
     @Test
     public void it_cypherizes_an_object_with_an_id_and_a_string_property() {
+        String expected = "CREATE (n:thing) SET n.__id = 'foo', n.name = 'swamp'";
+        String actual = subject.cypherize(new ThingWithIdAndString());
+        assertThat(actual, is(expected));
+    }
 
-        @Graphable("thing")
-        class Thing {
-            @GraphID
-            public String getID() {
-                return "foo";
-            }
-
-            @GraphString("name")
-            public String getName() {
-                return "swamp";
-            }
+    @Graphable("thing")
+    public class ThingWithIdAndString {
+        @GraphID
+        public String getID() {
+            return "foo";
         }
 
-        String expected = "CREATE (n:thing) SET n.__id = 'foo', n.name = 'swamp'";
-        String actual = subject.cypherize(new Thing());
-
-        assertThat(actual, is(expected));
+        @GraphString("name")
+        public String getName() {
+            return "swamp";
+        }
     }
 
     @Test
     public void it_cypherizes_an_object_with_an_id_and_a_string_property_that_are_the_same() {
-
-        @Graphable("thing")
-        class Thing {
-            @GraphID
-            @GraphString("name")
-            public String getName() {
-                return "swamp";
-            }
-        }
-
         String expected = "CREATE (n:thing) SET n.__id = 'swamp', n.name = 'swamp'";
-        String actual = subject.cypherize(new Thing());
-
+        String actual = subject.cypherize(new ThingWithSameIdAndString());
         assertThat(actual, is(expected));
+    }
+
+    @Graphable("thing")
+    public class ThingWithSameIdAndString {
+        @GraphID
+        @GraphString("name")
+        public String getName() {
+            return "swamp";
+        }
     }
 
     @Test
     public void it_cypherizes_an_object_with_an_id_and_an_integer_property() {
+        String expected = "CREATE (n:thing) SET n.__id = 'foo', n.age = 2";
+        String actual = subject.cypherize(new ThingWithIdAndInt());
+        assertThat(actual, is(expected));
+    }
 
-        @Graphable("thing")
-        class Thing {
-            @GraphID
-            public String getID() {
-                return "foo";
-            }
-
-            @GraphInt("age")
-            public int getAge() {
-                return 2;
-            }
+    @Graphable("thing")
+    public class ThingWithIdAndInt {
+        @GraphID
+        public String getID() {
+            return "foo";
         }
 
-        String expected = "CREATE (n:thing) SET n.__id = 'foo', n.age = 2";
-        String actual = subject.cypherize(new Thing());
-
-        assertThat(actual, is(expected));
+        @GraphInt("age")
+        public int getAge() {
+            return 2;
+        }
     }
 
     @Test
     public void it_cypherizes_an_object_with_all_the_things() {
+        String expected = "CREATE (n:user) SET n.__id = 'foo', n.age = 106, n.name = 'Bob'";
+        String actual = subject.cypherize(new ThingWithItAll());
+        assertThat(actual, is(expected));
+    }
 
-        @Graphable("user")
-        class Thing {
-            @GraphID
-            public String getID() {
-                return "foo";
-            }
-
-            @GraphString("name")
-            public String getName() {
-                return "Bob";
-            }
-
-            @GraphInt("age")
-            public int getAge() {
-                return 106;
-            }
+    @Graphable("user")
+    public class ThingWithItAll {
+        @GraphID
+        public String getID() {
+            return "foo";
         }
 
-        String expected = "CREATE (n:user) SET n.__id = 'foo', n.age = 106, n.name = 'Bob'";
-        String actual = subject.cypherize(new Thing());
+        @GraphString("name")
+        public String getName() {
+            return "Bob";
+        }
 
-        assertThat(actual, is(expected));
+        @GraphInt("age")
+        public int getAge() {
+            return 106;
+        }
     }
 }

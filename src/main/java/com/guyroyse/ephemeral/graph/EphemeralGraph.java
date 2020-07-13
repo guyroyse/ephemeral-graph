@@ -3,6 +3,7 @@ package com.guyroyse.ephemeral.graph;
 import com.guyroyse.ephemeral.graph.annotations.GraphID;
 import com.guyroyse.ephemeral.graph.lettuce.GraphCommands;
 import com.guyroyse.ephemeral.graph.lettuce.LettuceGraph;
+import com.guyroyse.ephemeral.graph.reflection.Reflector;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -40,19 +41,10 @@ public class EphemeralGraph {
     private String extractId(Object o) {
         Optional<String> id = Arrays.stream(o.getClass().getMethods())
                 .filter(m -> m.isAnnotationPresent(GraphID.class))
-                .map(m -> (String) invoke(m, o))
+                .map(m -> (String) Reflector.invoke(m, o))
                 .findFirst();
 
-        return id.isPresent() ? id.get() : null;
-    }
-
-    private Object invoke(Method m, Object o) {
-        try {
-            return m.invoke(o);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return id.get();
     }
 
 }

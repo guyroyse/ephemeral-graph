@@ -4,6 +4,7 @@ import com.guyroyse.ephemeral.graph.annotations.GraphID;
 import com.guyroyse.ephemeral.graph.annotations.GraphInt;
 import com.guyroyse.ephemeral.graph.annotations.GraphString;
 import com.guyroyse.ephemeral.graph.annotations.Graphable;
+import com.guyroyse.ephemeral.graph.reflection.Reflector;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -49,7 +50,7 @@ public class Cypherizer {
 
         GraphID graphID = method.getAnnotation(GraphID.class);
         if (graphID != null) {
-            String value = (String) invoke(method, object);
+            String value = (String) Reflector.invoke(method, object);
             String name = "__id";
             set = String.format("n.%s = '%s'", name, value);
         }
@@ -62,7 +63,7 @@ public class Cypherizer {
 
         GraphString graphString = method.getAnnotation(GraphString.class);
         if (graphString != null) {
-            String value = (String) invoke(method, object);
+            String value = (String) Reflector.invoke(method, object);
             String name = graphString.value();
             set = String.format("n.%s = '%s'", name, value);
         }
@@ -75,20 +76,11 @@ public class Cypherizer {
 
         GraphInt graphInt = method.getAnnotation(GraphInt.class);
         if (graphInt != null) {
-            int value = (int) invoke(method, object);
+            int value = (int) Reflector.invoke(method, object);
             String name = graphInt.value();
             set = String.format("n.%s = %d", name, value);
         }
 
         return set;
-    }
-
-    private Object invoke(Method m, Object o) {
-        try {
-            return m.invoke(o);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }
