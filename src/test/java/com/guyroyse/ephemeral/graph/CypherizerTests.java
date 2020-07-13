@@ -5,11 +5,13 @@ import com.guyroyse.ephemeral.graph.annotations.GraphInt;
 import com.guyroyse.ephemeral.graph.annotations.GraphString;
 import com.guyroyse.ephemeral.graph.annotations.Graphable;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+@DisplayName("Cypherizer")
 public class CypherizerTests {
 
     private Cypherizer subject;
