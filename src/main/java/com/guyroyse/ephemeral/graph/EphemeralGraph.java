@@ -39,12 +39,11 @@ public class EphemeralGraph {
     }
 
     private String extractId(Object o) {
-        Optional<String> id = Arrays.stream(o.getClass().getMethods())
+        return (String) Arrays.stream(o.getClass().getMethods())
                 .filter(m -> m.isAnnotationPresent(GraphID.class))
-                .map(m -> (String) Reflector.invoke(m, o))
-                .findFirst();
-
-        return id.get();
+                .findFirst()
+                .flatMap(m -> Reflector.invoke(m, o))
+                .orElseThrow(() -> new RuntimeException("GraphID annotation is required"));
     }
 
 }

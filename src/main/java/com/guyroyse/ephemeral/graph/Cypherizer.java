@@ -9,6 +9,7 @@ import com.guyroyse.ephemeral.graph.reflection.Reflector;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,12 +49,14 @@ public class Cypherizer {
     private String buildQueryIdSet(Object object, Method method) {
         String set = "";
 
-        GraphID graphID = method.getAnnotation(GraphID.class);
-        if (graphID != null) {
-            String value = (String) Reflector.invoke(method, object);
-            String name = "__id";
-            set = String.format("n.%s = '%s'", name, value);
-        }
+        Optional<GraphID> annotation = Reflector.getAnnotation(method, GraphID.class);
+        if (annotation.isEmpty()) return set;
+
+        Optional<Object> value = Reflector.invoke(method, object);
+        if (value.isEmpty()) return set;
+
+        String name = "__id";
+        set = String.format("n.%s = '%s'", name, value.get());
 
         return set;
     }
@@ -61,12 +64,14 @@ public class Cypherizer {
     private String buildQueryStringSet(Object object, Method method) {
         String set = "";
 
-        GraphString graphString = method.getAnnotation(GraphString.class);
-        if (graphString != null) {
-            String value = (String) Reflector.invoke(method, object);
-            String name = graphString.value();
-            set = String.format("n.%s = '%s'", name, value);
-        }
+        Optional<GraphString> annotation = Reflector.getAnnotation(method, GraphString.class);
+        if (annotation.isEmpty()) return set;
+
+        Optional<Object> value = Reflector.invoke(method, object);
+        if (value.isEmpty()) return set;
+
+        String name = annotation.get().value();
+        set = String.format("n.%s = '%s'", name, value.get());
 
         return set;
     }
@@ -74,12 +79,14 @@ public class Cypherizer {
     private String buildQueryIntegerSet(Object object, Method method) {
         String set = "";
 
-        GraphInt graphInt = method.getAnnotation(GraphInt.class);
-        if (graphInt != null) {
-            int value = (int) Reflector.invoke(method, object);
-            String name = graphInt.value();
-            set = String.format("n.%s = %d", name, value);
-        }
+        Optional<GraphInt> annotation = Reflector.getAnnotation(method, GraphInt.class);
+        if (annotation.isEmpty()) return set;
+
+        Optional<Object> value = Reflector.invoke(method, object);
+        if (value.isEmpty()) return set;
+
+        String name = annotation.get().value();
+        set = String.format("n.%s = %s", name, (int) value.get());
 
         return set;
     }
